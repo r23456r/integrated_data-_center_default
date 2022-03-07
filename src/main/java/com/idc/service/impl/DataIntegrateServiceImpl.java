@@ -92,7 +92,7 @@ public class DataIntegrateServiceImpl implements DataIntegrateService {
         int num = (length + groupSize - 1) / groupSize;
         for (int i = 0; i < num; i++) {
             int fromIndex = i * groupSize;
-            int toIndex = (i + 1) * groupSize < length ? (i + 1) * groupSize : length;
+            int toIndex = Math.min((i + 1) * groupSize, length);
             if ("insert".equals(type)) {
                 idcNodeInfoMapper.batchInsertIDCNodeInfos(tableName, batchList.subList(fromIndex, toIndex));
             } else {

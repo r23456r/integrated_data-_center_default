@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.idc.service.DataIntegrateService;
 import com.idc.service.DataService;
 import com.idc.service.impl.WTODataServiceImpl;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,8 @@ public class WTOController {
     private DataIntegrateService dataIntegrateService;
 
     @Autowired
-    private WTODataServiceImpl dataService;
+    @Qualifier(value = "WTODataServiceImpl")
+    private DataService dataService;
 
     @ResponseBody
     @GetMapping("/getData")
