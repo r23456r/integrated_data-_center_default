@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idc.dao.mapper.IDCNodeInfoMapper">
+    <resultMap id="IDCNodeInfo" type="com.idc.dao.entity.IDCNodeInfoVo">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="fatherId" jdbcType="VARCHAR" property="fatherId"/>
+        <result column="nodeName" jdbcType="VARCHAR" property="nodeName"/>
+        <result column="iDCAttributei" jdbcType="LONGVARCHAR" property="iDCAttributei"/>
+        <result column="iDCType" jdbcType="INTEGER" property="iDCType"/>
+        <result column="createDate" jdbcType="DATE" property="createDate"/>
+        <result column="updateDate" jdbcType="DATE" property="updateDate"/>
+    </resultMap>
+
+    <insert id="batchInsertIDCNodeInfos" parameterType="java.util.List">
+        <foreach collection="infoVoList" item="item" index="index" open="" close="" separator=";">
+            INSERT ${tableName} (id,fatherId,nodeName,iDCAttributei,iDCType,createDate,updateDate)
+            values (
+            #{item.id},#{item.fatherId},#{item.nodeName},#{item.iDCAttributei},#{item.iDCType},#{item.createDate},#{item.updateDate}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectAllIDCNodeInfos" resultMap="IDCNodeInfo">
+        select id, fatherId,nodeName,iDCAttributei,iDCType,createDate,updateDate from ${tableName}
+    </select>
+
+    <update id="batchUpdateIDCNodeInfos">
+        <foreach collection="infoVoList" item="item" index="index" open="" close="" separator=";">
+            UPDATE  ${tableName}  SET
+            iDCAttributei = #{item.iDCAttributei},
+            isIncludeData = #{item.iDCType},
+            updateDate = #{item.updateDate}
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

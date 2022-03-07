@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.idc.dao.mapper.DataSourceInfoMapper">
+
+    <resultMap id="DataSourceInfo" type="com.idc.dao.entity.DataSourceInfo">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="dataSource" jdbcType="VARCHAR" property="dataSource"/>
+        <result column="dataName" jdbcType="VARCHAR" property="dataName"/>
+        <result column="nodeInfoTblName" jdbcType="VARCHAR" property="nodeInfoTblName"/>
+        <result column="nodeDataTblName" jdbcType="VARCHAR" property="nodeDataTblName"/>
+        <result column="iconPath" jdbcType="VARCHAR" property="iconPath"/>
+        <result column="datacomment" jdbcType="LONGVARCHAR" property="datacomment"/>
+        <result column="createDate" jdbcType="DATE" property="createDate"/>
+        <result column="updateDate" jdbcType="DATE" property="updateDate"/>
+    </resultMap>
+
+
+    <insert id="insertDataSourceInfo"  parameterType="com.idc.dao.entity.DataSourceInfo">
+        INSERT data_source_info (dataSource,dataName,nodeInfoTblName,nodeDataTblName,iconPath,datacomment,selectDataByDataSourcecreateDate,updateDate)
+            values (
+            #{dataInfo.dataSource},
+            #{dataInfo.dataName},
+            #{dataInfo.nodeInfoTblName},
+            #{dataInfo.nodeDataTblName},
+            #{dataInfo.iconPath},
+            #{dataInfo.datacomment},
+            #{dataInfo.createDate},
+            #{dataInfo.updateDate}
+            )
+    </insert>
+
+    <select id="selectDataByDataSource" resultMap="DataSourceInfo">
+        select id, dataSource,dataName,nodeInfoTblName,nodeDataTblName,iconPath,datacomment,createDate,updateDate
+        from data_source_info
+        where dataSource = #{dataSource}
+    </select>
+
+
+    <delete id="deleteDataByDataSource" parameterType="java.lang.String">
+        DELETE FROM data_source_info where dataSource = #{dataSource}
+    </delete>
+
+    <delete id="clearTable" parameterType="java.lang.String">
+        DELETE FROM ${tableName}
+    </delete>
+
+    <delete id="deleteTable" parameterType="java.lang.String">
+        DROP TABLE ${tableName}
+    </delete>
+
+    <update id="createNodeInfoTable" parameterType="java.lang.String">
+        CREATE TABLE IF NOT EXISTS ${tableName} (
+           id VARCHAR(64) NOT NULL COMMENT 'ID',
+           fatherId VARCHAR(64) COMMENT '父ID',
+           nodeName VARCHAR(256)  COMMENT '节点名称',
+           iDCAttributei TEXT  COMMENT '参数信息',
+           iDCType INT  COMMENT '节点类型',
+           createDate DATE  COMMENT '创建时间',
+           updateDate DATE  COMMENT '更新时间',
+           PRIMARY KEY ( `id` )
+        )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=#{tableComment};
+    </update>
+
+    <update id="createNodeDataTable" parameterType="java.lang.String">
+        CREATE TABLE IF NOT EXISTS ${tableName} (
+           id INT PRIMARY KEY AUTO_INCREMENT  COMMENT 'ID',
+           nodeId VARCHAR(64) COMMENT '节点ID',
+           paramKey VARCHAR(256)  COMMENT 'key',
+           paramValue TEXT  COMMENT '数据',
+           createDate DATE  COMMENT '创建时间',
+           updateDate DATE  COMMENT '更新时间'
+        )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=#{tableComment};
+    </update>
+</mapper>
