@@ -25,7 +25,7 @@ public class WTOController {
     @GetMapping("/getData")
     public String getData() {
         JSONObject jsonObject = dataService.getDataInfo();
-        dataIntegrateService.insertData("GlobalFirePower", jsonObject);
+        dataIntegrateService.insertData("wto", jsonObject);
         return jsonObject.toJSONString();
     }
 
