@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 public class XHCountryDataServiceImpl implements DataService {
 
     @Override
+    public JSONObject getDataInfo(Integer id) {
+        return null;
+    }
+
+    @Override
     public JSONObject getDataInfo() {
         JSONObject jsonObject = getXHCountryData2022();
         return jsonObject;

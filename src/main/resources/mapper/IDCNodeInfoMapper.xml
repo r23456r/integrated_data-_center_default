@@ -28,7 +28,7 @@
         <foreach collection="infoVoList" item="item" index="index" open="" close="" separator=";">
             UPDATE  ${tableName}  SET
             iDCAttributei = #{item.iDCAttributei},
-            isIncludeData = #{item.iDCType},
+            iDCType = #{item.iDCType},
             updateDate = #{item.updateDate}
             WHERE id = #{item.id}
         </foreach>

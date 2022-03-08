@@ -36,5 +36,5 @@ public class WtoBean {
     private String ValueFlagCode;
     private String ValueFlag;
     private String TextValue;
-    private double Value;
+    private String  Value;
 }
