@@ -52,7 +52,7 @@ public class NationalBureauDataServiceImpl implements DataService {
 
 
     @Override
-    public JSONObject getDataInfo(Integer id) {
+    public JSONObject getDataInfo(String id) {
         return null;
     }
 

@@ -20,7 +20,7 @@ import java.util.Date;
 public class GlobalFirePowerDataServiceImpl implements DataService {
 
     @Override
-    public JSONObject getDataInfo(Integer id) {
+    public JSONObject getDataInfo(String id) {
         return null;
     }
 
