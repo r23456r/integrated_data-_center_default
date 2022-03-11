@@ -131,6 +131,12 @@
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
+<!--        //http proxy代理-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.13</version>
+        </dependency>
     </dependencies>
 
     <!-- 本地打war包使用的build -->
