@@ -1,9 +1,7 @@
 package com.idc.common.utils;
 
 import cn.hutool.http.HttpUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -57,7 +55,6 @@ public class HttpUtils {
         System.out.println("success" + HttpUtil.get("www.youtube.com"));
 //        String url = "https://api.wto.org/timeseries/v1/data?i=BAT_BV_M&r=156&max=1000000&fmt=json&mode=full&lang=1&meta=false&subscription-key=1dc531027a3b48a588e167c449bdb739";
         String url = "https://api.wto.org/timeseries/v1/data?i=TP_A_0010&r=156&fmt=json&mode=full&lang=1&meta=false&subscription-key=1dc531027a3b48a588e167c449bdb739";
-
         return HttpUtil.get(url);
 
 
