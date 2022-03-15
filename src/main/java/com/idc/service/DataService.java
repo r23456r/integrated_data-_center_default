@@ -8,6 +8,6 @@ public interface DataService {
      * 获取信息数据
      * @return
      */
-    JSONObject getDataInfo(String id);
+    JSONObject getDataInfo(String id) throws InterruptedException;
     JSONObject getDataInfo();
 }

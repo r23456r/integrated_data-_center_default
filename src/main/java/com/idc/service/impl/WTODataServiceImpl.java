@@ -29,6 +29,8 @@ public class WTODataServiceImpl implements DataService {
 
     private final String KEY = "1dc531027a3b48a588e167c449bdb739";
     private final String DATA_URL = "https://api.wto.org/timeseries/v1/data";
+
+    private final String COUNT_URL = "https://api.wto.org/timeseries/v1/data_count";
     private final String INDICATORS_URL = "https://api.wto.org/timeseries/v1/indicators?i=all&t=all&pc=all&tp=all&frq=all&lang=1";
     private final String REPORTERS_URL = "https://api.wto.org/timeseries/v1/reporters?ig=all&reg=all&gp=all&lang=1";
 
@@ -36,20 +38,37 @@ public class WTODataServiceImpl implements DataService {
     private final Map reporterMap = getMap(getReporterNames());
 
     @Override
-    public JSONObject getDataInfo(String id) {
+    public JSONObject getDataInfo(String id) throws InterruptedException {
         JSONObject wtoJson = new JSONObject();
         List<String> indicators = getIndicators();
         int i = 0;
         List<WtoBean> allBeans = new ArrayList<>(12);
+        List<String> bigSize = new ArrayList<>();
         for (String indicator : indicators) {
             log.info("size:#{}" + "now:#{}", indicators.size(), i++);
-            if (i > 5) {
-                log.info("慢了");
-                continue;
-            }
+//            if (i < 70) {
+//                log.info("跳过前80指标");
+//                continue;
+//            }
+//                if (i >100) {
+//                    log.info("跳过前80指标");
+//                    continue;
+//                }
+//                Integer listCount = getWtoSourceListCount(indicator, id);
+//                log.info("listCount: {}",listCount);
+//    //            Thread.sleep(1000);
+//                if (listCount < 800) {
+//                Thread.sleep(500);
+//    //                bigSize.add(indicator);
+//    //                continue;
+//                }
+
             List<WtoBean> wtoSourceList = getWtoSourceList(indicator, id);
-            allBeans.addAll(wtoSourceList);
+            if (wtoSourceList != null) {
+                allBeans.addAll(wtoSourceList);
+            }
         }
+        log.info("bigSize:{}", bigSize.toString());
         Map<String, List<WtoBean>> collect = allBeans.stream().collect(Collectors.groupingBy(WtoBean::getReportingEconomy));
         for (String reportingEconomy : collect.keySet()) {
             List<WtoBean> singlebeans = collect.get(reportingEconomy);
@@ -70,8 +89,12 @@ public class WTODataServiceImpl implements DataService {
         for (String indicator : collect.keySet()) {
             List<WtoBean> groupByIndcatorBeans = collect.get(indicator);
             JSONObject attrB = new JSONObject();
-            String enIndicator = (String) indicatorMap.get(indicator);
-            attrB.put("indicator", enIndicator);
+            //翻译不准确的，暂时屏蔽
+            if (indicatorMap.get(indicator)==null) {
+                continue;
+            }
+            String enIndicator = String.valueOf(indicatorMap.get(indicator));
+            attrB.put("indicator",enIndicator );
             JSONObject dataB = new JSONObject();
             for (WtoBean wtoBean : groupByIndcatorBeans) {
                 dataB.put(String.valueOf(wtoBean.getYear()), wtoBean.getValue());
@@ -103,7 +126,7 @@ public class WTODataServiceImpl implements DataService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("i", IndicatorCode);
         paramMap.put("r", id == null ? "all" : id);
-        paramMap.put("max", "1000000");
+        paramMap.put("max", "2000");
         paramMap.put("fmt", "json");
         paramMap.put("mode", "full");
         paramMap.put("lang", 1);
@@ -122,6 +145,17 @@ public class WTODataServiceImpl implements DataService {
         }
         return dataset.toJavaList(WtoBean.class);
     }
+
+    public Integer getWtoSourceListCount(String IndicatorCode, String id) {
+//        https://api.wto.org/timeseries/v1/data_count?i=TP_E_0130&r=156&subscription-key=1dc531027a3b48a588e167c449bdb739
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("i", IndicatorCode);
+        paramMap.put("r", id == null ? "all" : id);
+        paramMap.put("subscription-key", KEY);
+        String response = HttpUtils.toGet(COUNT_URL, paramMap);
+        return Integer.valueOf(response);
+    }
+
 
     public List<String> getIndicators() {
         Map<String, Object> paramMap = new HashMap<>();
@@ -149,7 +183,7 @@ public class WTODataServiceImpl implements DataService {
 
 
     @Test
-    public void testGetAll() {
+    public void testGetAll() throws InterruptedException {
         getDataInfo(null);
     }
 
@@ -177,7 +211,7 @@ public class WTODataServiceImpl implements DataService {
 
     //
     @Test
-    public void testGet10() {
+    public void testGet10() throws InterruptedException {
         String s = "156," + "840," + "392," + "408," + "410," + "643," + "826," + "040," + "804," + "923," + "918," + "928";
         for (String id : Arrays.asList(s)) {
             getDataInfo(id);

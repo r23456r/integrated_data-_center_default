@@ -34,7 +34,7 @@ public class WTOController {
 
     @ResponseBody
     @GetMapping("/getData/id")
-    public String getData(@PathVariable String id) throws IOException {
+    public String getData(@PathVariable String id) throws IOException, InterruptedException {
 //        for (String id : Arrays.asList("156", "840", "392", "408", "410", "643", "826", "040", "804", "923", "918", "928")) {
         JSONObject jsonObject = dataService.getDataInfo(id);
         System.out.println(jsonObject.toJSONString());
