@@ -26,7 +26,12 @@ public class UtilHandle {
         nodeData.put(Constants.IDC_ATTRIBUTE, attribute);
         return nodeData;
     }
-
+    public static Map setNodeDataMap(Map<Object,Object> attribute, Map<Object,Object> data) {
+        Map nodeData = new LinkedHashMap<>();
+        nodeData.put(Constants.IDC_DATA, data);
+        nodeData.put(Constants.IDC_ATTRIBUTE, attribute);
+        return nodeData;
+    }
     public static JSONObject setNodeInfoOnly(JSONObject data) {
         JSONObject nodeData = data;
         if (data == null) {

@@ -1,5 +1,6 @@
 package com.idc.common.utils;
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -14,7 +15,16 @@ import java.util.Map;
 public class HttpUtils {
 
     private static final String PROXY_SERVER_HOST = "127.0.0.1";
-    final static int PROXY_SERVER_PORT = 7891;
+    final static int PROXY_SERVER_PORT = 9999;
+
+    /**
+     * 单次请求强制走代理
+     */
+    public static String vpnGet(String url) {
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(PROXY_SERVER_HOST, PROXY_SERVER_PORT));
+        HttpRequest httpRequest = HttpRequest.get(url);
+        return httpRequest.setProxy(proxy).execute().body();
+    }
 
     public static String toGet(String url, Map<String, Object> map) {
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(PROXY_SERVER_HOST, PROXY_SERVER_PORT));
